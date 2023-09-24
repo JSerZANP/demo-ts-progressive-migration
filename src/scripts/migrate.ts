@@ -1,4 +1,6 @@
 import ts from "typescript";
+import { simpleGit } from "simple-git";
+const git = simpleGit();
 
 function collectTscDiagnostics(
   basePath: string,
@@ -37,6 +39,23 @@ function collectTscDiagnostics(
   return diagnostics;
 }
 
-collectTscDiagnostics(__dirname + "/../../", "./tsconfig.json", {
-  noImplicitAny: true,
-});
+function getAllDiagnostics() {
+  return collectTscDiagnostics(__dirname + "/../../", "./tsconfig.json", {
+    noImplicitAny: true,
+  });
+}
+
+function diffTscDiagnostics(from: string, to: string) {
+  git.checkout(from);
+  const diagnosticsFrom = getAllDiagnostics();
+  git.checkout("-");
+  git.checkout(to);
+  const diagnosticsTo = getAllDiagnostics();
+  git.checkout("-");
+  console.log(diagnosticsFrom, diagnosticsTo);
+}
+
+diffTscDiagnostics(
+  "b22d13f06d5d25cab802dd432168f1a604bf8fbc",
+  "f0d9616baddd2dfafffa6d51d243e09c4be9e614"
+);
