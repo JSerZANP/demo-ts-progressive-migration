@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "nodenext",
     "outDir": "dist"
   },
   "include": ["src/**/*"]

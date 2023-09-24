@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "migrate": "ts-node ./src/scripts/migrate.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
 }
