@@ -29,7 +29,7 @@ function collectTscDiagnostics(
   });
 
   const diagnostics = ts.getPreEmitDiagnostics(program).map((diagnostic) => ({
-    path: diagnostic.file.fileName,
+    path: diagnostic.file?.fileName,
     start: diagnostic.start,
     length: diagnostic.length,
     code: diagnostic.code,
@@ -45,13 +45,13 @@ function getAllDiagnostics() {
   });
 }
 
-function diffTscDiagnostics(from: string, to: string) {
+async function diffTscDiagnostics(from: string, to: string) {
+  const currentBranch = (await git.branch()).current;
   git.checkout(from);
   const diagnosticsFrom = getAllDiagnostics();
-  git.checkout("-");
   git.checkout(to);
   const diagnosticsTo = getAllDiagnostics();
-  git.checkout("-");
+  git.checkout(currentBranch);
   console.log(diagnosticsFrom, diagnosticsTo);
 }
 
