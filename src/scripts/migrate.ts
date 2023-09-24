@@ -1,4 +1,5 @@
 import ts from "typescript";
+import path from "path";
 import { simpleGit } from "simple-git";
 const git = simpleGit();
 
@@ -64,9 +65,10 @@ async function diffTscDiagnostics(from: string, to: string, basePath: string) {
     const hash = JSON.stringify(diagnostic);
     existingDiagnostics.set(hash, diagnostic);
   });
-
   const diff = await git.diffSummary([from, to]);
-  const changedFiles = new Set(diff.files.map((file) => basePath + file.file));
+  const changedFiles = new Set(
+    diff.files.map((file) => path.resolve(basePath + file.file))
+  );
 
   const diagnosticsToFix = diagnosticsTo.filter((diagnostic) => {
     if (diagnostic.path == null) return false;
@@ -78,7 +80,7 @@ async function diffTscDiagnostics(from: string, to: string, basePath: string) {
 }
 
 diffTscDiagnostics(
-  "b22d13f06d5d25cab802dd432168f1a604bf8fbc",
-  "f0d9616baddd2dfafffa6d51d243e09c4be9e614",
+  "1d67625d3991525cda22d42f077dfd54c364a899",
+  "225a888521ea8ddb48d2c514488897d8bbfd8f84",
   __dirname + "/../../"
 ).then(console.log);
